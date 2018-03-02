@@ -214,7 +214,7 @@ class Pipeline
      * @return void
      * @throws \LogicException
      */
-    protected function checkStackLength(): void
+    protected function checkStackLength()
     {
         if (empty($this->stack)) {
             throw new LogicException('Stack can not be empty');
