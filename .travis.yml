@@ -8,7 +8,7 @@ addons:
   code_climate:
     repo_token: 373c81a72ca20871e796381ac143062c0127eee8ebae25b5ddb9490e8b216999
 
-install: composer install --no-interaction --prefer-dist --no-suggest --ignore-platform-reqs --optimize-autoloader
+install: composer install --no-interaction --prefer-dist --no-suggest --optimize-autoloader
 
 script: vendor/bin/phpunit
 
