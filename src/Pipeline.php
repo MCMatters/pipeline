@@ -4,6 +4,7 @@ declare(strict_types = 1);
 
 namespace McMatters\Pipeline;
 
+use Closure;
 use InvalidArgumentException;
 use LogicException;
 use const false, null, true;
@@ -62,19 +63,24 @@ class Pipeline
     }
 
     /**
-     * @param string $method
+     * @param string|array|callable $method
      * @param array $args
      *
      * @return \McMatters\Pipeline\Pipeline
+     * @throws \InvalidArgumentException
      */
-    public function pipe(string $method, ...$args): self
+    public function pipe($method, ...$args): self
     {
+        if (!is_callable($method) || !is_callable([$this->class, $method])) {
+            throw new InvalidArgumentException('Method is not callable');
+        }
+
         $this->stack[] = [
             'method'        => $method,
             'args'          => $args,
             'default'       => $this->defaultValue,
             'position'      => $this->defaultPosition,
-            'without_class' => false,
+            'without_class' => $method instanceof Closure,
             'referencable'  => false,
         ];
 
