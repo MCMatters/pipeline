@@ -4,15 +4,27 @@ declare(strict_types = 1);
 
 namespace McMatters\Tests;
 
+use InvalidArgumentException;
 use McMatters\Pipeline\Pipeline;
 use PHPUnit\Framework\TestCase;
-use Throwable;
+use TypeError;
 
+/**
+ * Class PipelineTest
+ *
+ * @package McMatters\Tests
+ */
 class PipelineTest extends TestCase
 {
+    /**
+     * @throws InvalidArgumentException
+     * @throws \LogicException
+     * @throws \PHPUnit\Framework\ExpectationFailedException
+     * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
+     */
     public function testStrReplace()
     {
-        $string = (new Pipeline('FooBar', null, 2))
+        $string = (new Pipeline('FooBar', 2))
             ->pipe('str_replace', 'Foo', 'Baz')
             ->pipe('str_replace', 'Bar', 'Test')
             ->process();
@@ -29,15 +41,24 @@ class PipelineTest extends TestCase
         $this->assertEquals('Goodbye Narnia', $string);
     }
 
+    /**
+     * @throws TypeError
+     */
     public function testStrReplaceWithException()
     {
-        $this->expectException(Throwable::class);
+        $this->expectException(TypeError::class);
 
-        (new Pipeline('FooBar', 'Foo', 2))
-            ->pipe('str_replace', null, null, null)
+        (new Pipeline('FooBar', 2))
+            ->pipe(['Foo', 'str_replace'], null, null)
             ->process();
     }
 
+    /**
+     * @throws InvalidArgumentException
+     * @throws \LogicException
+     * @throws \PHPUnit\Framework\ExpectationFailedException
+     * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
+     */
     public function testArray()
     {
         $data = [

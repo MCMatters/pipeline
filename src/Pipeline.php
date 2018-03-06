@@ -4,7 +4,6 @@ declare(strict_types = 1);
 
 namespace McMatters\Pipeline;
 
-use Closure;
 use InvalidArgumentException;
 use LogicException;
 use const false, null, true;
@@ -21,11 +20,6 @@ class Pipeline
      * @var mixed
      */
     protected $data;
-
-    /**
-     * @var string|null
-     */
-    protected $class;
 
     /**
      * @var array
@@ -46,42 +40,33 @@ class Pipeline
      * Pipeline constructor.
      *
      * @param null $data
-     * @param string|null $class
      * @param int $defaultDataPosition
      * @param null $defaultValue
      */
     public function __construct(
         $data = null,
-        string $class = null,
         int $defaultDataPosition = 0,
         $defaultValue = null
     ) {
         $this->data = $data;
-        $this->class = $class;
         $this->defaultPosition = $defaultDataPosition;
         $this->defaultValue = $defaultValue;
     }
 
     /**
-     * @param string|array|callable $method
+     * @param string|array|callable $callable
      * @param array $args
      *
      * @return \McMatters\Pipeline\Pipeline
-     * @throws \InvalidArgumentException
      */
-    public function pipe($method, ...$args): self
+    public function pipe(callable $callable, ...$args): self
     {
-        if (!is_callable($method) || !is_callable([$this->class, $method])) {
-            throw new InvalidArgumentException('Method is not callable');
-        }
-
         $this->stack[] = [
-            'method'        => $method,
-            'args'          => $args,
-            'default'       => $this->defaultValue,
-            'position'      => $this->defaultPosition,
-            'without_class' => $method instanceof Closure,
-            'referencable'  => false,
+            'callable'     => $callable,
+            'args'         => $args,
+            'default'      => $this->defaultValue,
+            'position'     => $this->defaultPosition,
+            'referencable' => false,
         ];
 
         return $this;
@@ -135,19 +120,6 @@ class Pipeline
     }
 
     /**
-     * @return \McMatters\Pipeline\Pipeline
-     * @throws \LogicException
-     */
-    public function withoutClass(): self
-    {
-        $this->checkStackLength();
-
-        $this->stack[$this->getLastStackKey()]['without_class'] = true;
-
-        return $this;
-    }
-
-    /**
      * @return mixed
      */
     public function process()
@@ -155,11 +127,7 @@ class Pipeline
         foreach ($this->stack as $key => $item) {
             $args = $this->getArgs($item);
 
-            $callable = $this->class && !$item['without_class']
-                ? [$this->class, $item['method']]
-                : $item['method'];
-
-            $data = call_user_func_array($callable, $args);
+            $data = call_user_func_array($item['callable'], $args);
 
             $this->data = $this->getValue($data, $item['default']);
 
