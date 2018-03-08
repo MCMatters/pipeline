@@ -21,7 +21,7 @@
     },
     "autoload-dev": {
         "psr-4": {
-            "McMatters\\Tests\\": "tests"
+            "McMatters\\Pipeline\\Tests\\": "tests"
         }
     }
 }

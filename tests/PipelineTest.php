@@ -2,7 +2,7 @@
 
 declare(strict_types = 1);
 
-namespace McMatters\Tests;
+namespace McMatters\Pipeline\Tests;
 
 use InvalidArgumentException;
 use McMatters\Pipeline\Pipeline;
@@ -12,7 +12,7 @@ use TypeError;
 /**
  * Class PipelineTest
  *
- * @package McMatters\Tests
+ * @package McMatters\Pipeline\Tests
  */
 class PipelineTest extends TestCase
 {
