@@ -6,8 +6,10 @@ namespace McMatters\Pipeline;
 
 use InvalidArgumentException;
 use LogicException;
-use const false, null, true;
+
 use function array_slice, call_user_func_array, count, is_callable;
+
+use const false, null, true;
 
 /**
  * Class Pipeline
@@ -39,9 +41,9 @@ class Pipeline
     /**
      * Pipeline constructor.
      *
-     * @param null $data
+     * @param mixed $data
      * @param int $defaultDataPosition
-     * @param null $defaultValue
+     * @param mixed $defaultValue
      */
     public function __construct(
         $data = null,
@@ -54,7 +56,7 @@ class Pipeline
     }
 
     /**
-     * @param string|array|callable $callable
+     * @param array|callable|string $callable
      * @param array $args
      *
      * @return \McMatters\Pipeline\Pipeline
@@ -62,10 +64,10 @@ class Pipeline
     public function pipe(callable $callable, ...$args): self
     {
         $this->stack[] = [
-            'callable'     => $callable,
-            'args'         => $args,
-            'default'      => $this->defaultValue,
-            'position'     => $this->defaultPosition,
+            'callable' => $callable,
+            'args' => $args,
+            'default' => $this->defaultValue,
+            'position' => $this->defaultPosition,
             'referencable' => false,
         ];
 
@@ -76,6 +78,7 @@ class Pipeline
      * @param mixed $value
      *
      * @return \McMatters\Pipeline\Pipeline
+     *
      * @throws \LogicException
      */
     public function default($value): self
@@ -90,6 +93,7 @@ class Pipeline
      * @param int $position
      *
      * @return \McMatters\Pipeline\Pipeline
+     *
      * @throws \InvalidArgumentException
      * @throws \LogicException
      */
@@ -107,8 +111,9 @@ class Pipeline
     }
 
     /**
-     * @return Pipeline
-     * @throws LogicException
+     * @return \McMatters\Pipeline\Pipeline
+     *
+     * @throws \LogicException
      */
     public function referencable(): self
     {
@@ -186,6 +191,7 @@ class Pipeline
 
     /**
      * @return void
+     *
      * @throws \LogicException
      */
     protected function checkStackLength()

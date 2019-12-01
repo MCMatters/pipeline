@@ -4,7 +4,6 @@ declare(strict_types = 1);
 
 namespace McMatters\Pipeline\Tests;
 
-use InvalidArgumentException;
 use McMatters\Pipeline\Pipeline;
 use PHPUnit\Framework\TestCase;
 use TypeError;
@@ -17,7 +16,7 @@ use TypeError;
 class PipelineTest extends TestCase
 {
     /**
-     * @throws InvalidArgumentException
+     * @throws \InvalidArgumentException
      * @throws \LogicException
      * @throws \PHPUnit\Framework\ExpectationFailedException
      * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
@@ -42,7 +41,7 @@ class PipelineTest extends TestCase
     }
 
     /**
-     * @throws TypeError
+     * @throws \TypeError
      */
     public function testStrReplaceWithException()
     {
@@ -54,7 +53,7 @@ class PipelineTest extends TestCase
     }
 
     /**
-     * @throws InvalidArgumentException
+     * @throws \InvalidArgumentException
      * @throws \LogicException
      * @throws \PHPUnit\Framework\ExpectationFailedException
      * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
@@ -62,12 +61,8 @@ class PipelineTest extends TestCase
     public function testArray()
     {
         $data = [
-            [
-                'foo' => 'bar',
-            ],
-            [
-                'baz' => 'test',
-            ],
+            ['foo' => 'bar'],
+            ['baz' => 'test'],
         ];
 
         $this->assertEquals(
